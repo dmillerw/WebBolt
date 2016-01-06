@@ -9,7 +9,7 @@ def from_hex_stream(stream):
         s.set_rgb(255, 255, 255)
         s.set_brightness(100)
         return s
-        
+
     if stream[:5] == 'CLTMP':
         data = stream[6:]
         first = data.find(',')
@@ -43,6 +43,30 @@ class state():
         self.green = 0
         self.blue = 0
         self.brightness = 0
+        self.temperature = 0
+
+        self.old_type = 0
+        self.old_red = 0
+        self.old_green = 0
+        self.old_blue = 0
+        self.old_brightness = 0
+        self.old_temperature = 0
+
+    def store_previous(self):
+        self.old_type = self.type
+        self.old_red = self.red
+        self.old_green = self.green
+        self.old_blue = self.blue
+        self.old_brightness = self.brightness
+        self.old_temperature = self.temperature
+
+    def revert_to_previous(self):
+        self.type = self.old_type
+        self.red = self.old_red
+        self.green = self.old_green
+        self.blue = self.old_blue
+        self.brightness = self.old_brightness
+        self.temperature = self.old_temperature
 
     def get_type(self):
         return self.type
@@ -57,16 +81,22 @@ class state():
         return self.brightness
 
     def set_rgb(self, red, green, blue):
+        self.store_previous()
+
         self.type = 0
         self.red = red
         self.green = green
         self.blue = blue
 
     def set_temperature(self, temperature):
+        self.store_previous()
+
         self.type = 1
         self.temperature = temperature
 
     def set_brightness(self, brightness):
+        self.store_previous()
+
         self.brightness = brightness
 
     def __str__(self):
