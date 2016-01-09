@@ -1,10 +1,10 @@
-import base_action
+import action
 
-class ActionToggle(base_action.Action):
+class ActionToggle(action.Action):
 
     def act(self, device, current_state):
         if int(current_state.get_brightness()) == 0:
-            current_state.set_brightness(100)
+            current_state.set_brightness(current_state.old_brightness)
         else:
             current_state.set_brightness(0)
 
