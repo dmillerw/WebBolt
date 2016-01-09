@@ -1,6 +1,6 @@
-import action
+import base_action
 
-class ActionToggle(action.Action):
+class ActionToggle(base_action.Action):
 
     def act(self, device, current_state):
         if int(current_state.get_brightness()) == 0:
