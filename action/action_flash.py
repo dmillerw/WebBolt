@@ -9,5 +9,5 @@ class ActionFlash(base_action.Action):
 
     def act(self, device, current_state):
         self.flash.write(device)
-        time.sleep(self.duration)
+        time.sleep(float(self.duration))
         current_state.write(device)

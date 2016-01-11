@@ -1,13 +1,15 @@
 import web
 import action
 import utils
+import state
 
 urls = (
     '/device/(.*)/state', 'GetState',
     '/device/(.*)/toggle', 'Toggle',
     '/device/(.*)/scene/(.*)', 'SetScene',
     '/device/(.*)/color/set', 'SetColor',
-    '/device/(.*)/brightness/set', 'SetBrightness'
+    '/device/(.*)/brightness/set', 'SetBrightness',
+    '/device/(.*)/flash', 'Flash'
 )
 
 app = web.application(urls, globals())
@@ -53,3 +55,12 @@ class SetBrightness:
         i = web.input()
         b = utils.try_get_input(i, 'brightness', 0)
         action.thread.queue.put(action.ActionSetBrightness(b))
+
+class Flash:
+    def GET(self, address):
+        i = web.input()
+        r = utils.try_get_input(i, 'red', 0)
+        g = utils.try_get_input(i, 'green', 0)
+        b = utils.try_get_input(i, 'blue', 0)
+        duration = utils.try_get_input(i, 'duration', 0.25)
+        action.thread.queue.put(action.ActionFlash(state.from_rgb(r, g, b, 100), duration))
